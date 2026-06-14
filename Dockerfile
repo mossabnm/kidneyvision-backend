@@ -16,6 +16,9 @@ WORKDIR /app
 # Copy application files
 COPY . .
 
+# Remove local .env so Railway env vars are the ONLY source of truth
+RUN rm -f .env
+
 # Create required Laravel directories
 RUN mkdir -p storage/framework/cache/data \
     storage/framework/sessions \
@@ -23,10 +26,7 @@ RUN mkdir -p storage/framework/cache/data \
     storage/framework/testing \
     storage/logs \
     bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 777 storage bootstrap/cache
 
-# Expose port (Railway sets PORT dynamically)
-EXPOSE ${PORT:-8000}
-
-# Start Laravel
-CMD php artisan migrate --force 2>/dev/null; php artisan config:cache; php artisan route:cache; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Start: migrate then serve (NO config:cache to avoid freezing wrong values)
+CMD php artisan migrate --force 2>/dev/null; php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
