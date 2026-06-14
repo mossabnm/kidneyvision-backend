@@ -10,11 +10,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd xml \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache mod_rewrite for Laravel pretty URLs
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
-
-# Set Apache to listen on Railway's dynamic PORT
-RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
 # Set document root to Laravel's public folder
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -33,7 +30,7 @@ COPY . .
 # Remove local .env so Railway env vars are the only source
 RUN rm -f .env
 
-# Create required Laravel directories and set permissions
+# Create Laravel directories and set permissions
 RUN mkdir -p storage/framework/cache/data \
     storage/framework/sessions \
     storage/framework/views \
@@ -43,5 +40,8 @@ RUN mkdir -p storage/framework/cache/data \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Run migrations on startup, then start Apache
-CMD php artisan migrate --force 2>/dev/null; apache2-foreground
+# Copy and set entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+CMD ["docker-entrypoint.sh"]
