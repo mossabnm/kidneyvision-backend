@@ -12,5 +12,9 @@ chmod -R 777 storage bootstrap/cache
 # Run migrations
 php artisan migrate --force 2>/dev/null || true
 
+# Ensure conflicting MPM modules are disabled at runtime
+a2dismod mpm_event mpm_worker || true
+a2enmod mpm_prefork || true
+
 # Start Apache
 exec apache2-foreground
