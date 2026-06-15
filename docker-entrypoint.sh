@@ -3,9 +3,13 @@ set -e
 
 # Configure Apache to listen on the correct PORT provided by Railway (defaulting to 80)
 # This is critical for Railway routing!
-PORT="${PORT:-80}"
-sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
-sed -i "s/:80/:${PORT}/" /etc/apache2/sites-available/000-default.conf
+PORT="${PORT:-8080}"
+# Completely replace the ports.conf with an omni-port configuration
+echo "Listen 80" > /etc/apache2/ports.conf
+echo "Listen ${PORT}" >> /etc/apache2/ports.conf
+
+# Update VirtualHost to accept connections on any port
+sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:\*>/" /etc/apache2/sites-available/000-default.conf
 
 # Ensure conflicting MPM modules are disabled at runtime just in case
 a2dismod mpm_event mpm_worker || true
