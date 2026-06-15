@@ -12,6 +12,6 @@ php artisan migrate --force 2>/dev/null || true
 php artisan config:clear
 php artisan cache:clear
 
-# Start PHP built-in web server on the port provided by Railway
-echo "Starting Laravel server on port $PORT..."
-exec php -S 0.0.0.0:${PORT:-8080} -t public
+# Start PHP built-in web server on the port provided by Railway (defaulting to 80)
+echo "Starting Laravel server on port ${PORT:-80}..."
+exec php -S 0.0.0.0:${PORT:-80} -t public server.php
