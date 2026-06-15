@@ -28,5 +28,5 @@ RUN rm -f .env
 # Expose port (Railway usually uses 8080)
 EXPOSE 8080
 
-# Run Laravel directly without entrypoint or Apache
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# Run Laravel directly without entrypoint or Apache, but CLEAR CACHE FIRST
+CMD ["sh", "-c", "php artisan config:clear && php artisan cache:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
