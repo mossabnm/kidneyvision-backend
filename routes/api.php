@@ -114,9 +114,9 @@ Route::get('/db-test', function () {
 // ──────────────────────────────────────────────
 Route::get('/env-test', function () {
     return response()->json([
-        'getenv' => getenv('DB_HOST') ?: 'NULL',
-        'env_function' => env('DB_HOST', 'DEFAULT_FALLBACK'),
-        'all_env_keys' => array_keys($_ENV),
-        'server_keys' => array_keys($_SERVER)
+        'os_env' => explode("\n", shell_exec('env')),
+        'directory_files' => explode("\n", shell_exec('ls -la')),
+        'config_cache_exists' => file_exists(base_path('bootstrap/cache/config.php')),
+        'env_file_exists' => file_exists(base_path('.env'))
     ]);
 });
