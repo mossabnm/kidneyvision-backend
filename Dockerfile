@@ -39,4 +39,7 @@ RUN mkdir -p storage/framework/cache/data \
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Expose the port for Railway routing
+EXPOSE 8080
+
 CMD ["docker-entrypoint.sh"]
