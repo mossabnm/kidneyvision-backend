@@ -120,3 +120,26 @@ Route::get('/env-test', function () {
         'env_file_exists' => file_exists(base_path('.env'))
     ]);
 });
+
+// ──────────────────────────────────────────────
+// Mail Debug Route
+// ──────────────────────────────────────────────
+Route::get('/mail-test', function () {
+    try {
+        \Illuminate\Support\Facades\Mail::raw('This is a test email from KidneyVision API directly via Resend.', function ($message) {
+            $message->to('mossab.nm.yt@gmail.com')
+                    ->subject('Test Email Resend');
+        });
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Email sent successfully via Resend API!',
+            'from_configured' => env('MAIL_FROM_ADDRESS')
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage(),
+            'from_configured' => env('MAIL_FROM_ADDRESS')
+        ]);
+    }
+});
