@@ -24,6 +24,7 @@ return [
         'http://127.0.0.1:5173',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
+        'https://kidneyvision-frontend.vercel.app',
         env('FRONTEND_URL'),
     ]),
 
