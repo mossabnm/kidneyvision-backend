@@ -44,6 +44,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Always lowercase the email address when reading or writing to prevent case-sensitivity issues with Resend API.
+     */
+    protected function email(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn (string $value) => strtolower($value),
+            set: fn (string $value) => strtolower($value),
+        );
+    }
+
+    /**
      * Get the analyses for the user.
      */
     public function analyses(): HasMany
