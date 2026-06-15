@@ -28,5 +28,5 @@ RUN rm -f .env
 # Expose port (Railway usually uses 8080)
 EXPOSE 8080
 
-# Run Laravel directly without entrypoint or Apache
-CMD ["sh", "-c", "printenv > .env && php artisan config:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# Run Laravel directly and force PHP to read system Environment variables (EGPCS)
+CMD ["sh", "-c", "php -d variables_order=EGPCS artisan config:clear && php -d variables_order=EGPCS artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
