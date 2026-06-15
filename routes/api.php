@@ -90,3 +90,21 @@ Route::middleware('auth:sanctum')->group(function () {
         ->where('id', '[0-9]+')
         ->name('analyses.report.pdf');
 });
+
+// ──────────────────────────────────────────────
+// Database Connection Test Route
+// ──────────────────────────────────────────────
+Route::get('/db-test', function () {
+    try {
+        $count = \Illuminate\Support\Facades\DB::table('users')->count();
+        return response()->json([
+            'status' => 'OK',
+            'users_count' => $count
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
