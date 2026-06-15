@@ -108,3 +108,15 @@ Route::get('/db-test', function () {
         ], 500);
     }
 });
+
+// ──────────────────────────────────────────────
+// Environment Debug Route
+// ──────────────────────────────────────────────
+Route::get('/env-test', function () {
+    return response()->json([
+        'getenv' => getenv('DB_HOST') ?: 'NULL',
+        'env_function' => env('DB_HOST', 'DEFAULT_FALLBACK'),
+        'all_env_keys' => array_keys($_ENV),
+        'server_keys' => array_keys($_SERVER)
+    ]);
+});
