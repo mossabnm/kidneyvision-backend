@@ -22,6 +22,9 @@ COPY . .
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Force Laravel to use Railway system environment variables
+RUN rm -f .env
+
 # Expose port (Railway usually uses 8080)
 EXPOSE 8080
 
